@@ -40,11 +40,21 @@ const Persons = ({ persons, deletePerson }) => (
   </ul>
 );
 
+const Message = ({ message, isError }) => {
+  if (!message) return null;
+
+  const messageClass = isError ? "error" : "success";
+
+  return <div className={`message ${messageClass}`}>{message}</div>;
+};
+
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -88,6 +98,19 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
+            setMessage(`Updated ${newName}'s number`);
+            setIsError(false);
+            setTimeout(() => setMessage(""), 3000);
+          })
+          .catch((error) => {
+            setMessage(
+              `Information of ${newName} has already been removed from server`
+            );
+            setIsError(true);
+            setPersons(
+              persons.filter((person) => person.id !== existingPerson.id)
+            );
+            setTimeout(() => setMessage(""), 5000);
           });
       }
     } else {
@@ -97,15 +120,27 @@ const App = () => {
         setPersons(persons.concat(response));
         setNewName("");
         setNewNumber("");
+        setMessage(`Added ${newName}`);
+        setTimeout(() => setMessage(""), 3000);
       });
     }
   };
 
   const deletePerson = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
-      personService.deletePerson(id).then(() => {
-        setPersons(persons.filter((person) => person.id !== id));
-      });
+      personService
+        .deletePerson(id)
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+          setMessage(`Deleted ${name}`);
+          setIsError(false);
+          setTimeout(() => setMessage(""), 3000);
+        })
+        .catch((error) => {
+          setMessage(`Failed to delete ${name}`);
+          setIsError(true);
+          setTimeout(() => setMessage(""), 3000);
+        });
     }
   };
 
@@ -117,6 +152,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message message={message} isError={isError} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h2>add a new</h2>
       <PersonForm
