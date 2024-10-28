@@ -116,13 +116,21 @@ const App = () => {
     } else {
       const newPerson = { name: newName, number: newNumber };
 
-      personService.create(newPerson).then((response) => {
-        setPersons(persons.concat(response));
-        setNewName("");
-        setNewNumber("");
-        setMessage(`Added ${newName}`);
-        setTimeout(() => setMessage(""), 3000);
-      });
+      personService
+        .create(newPerson)
+        .then((response) => {
+          setPersons(persons.concat(response));
+          setNewName("");
+          setNewNumber("");
+          setMessage(`Added ${newName}`);
+          setTimeout(() => setMessage(""), 3000);
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+          setMessage(error.response.data.error);
+          setIsError(true);
+          setTimeout(() => setMessage(""), 3000);
+        });
     }
   };
 
