@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
+const logger = require("./utils/logger");
+require("dotenv").config();
 
 const blogSchema = mongoose.Schema({
   title: String,
@@ -12,7 +14,8 @@ const blogSchema = mongoose.Schema({
 
 const Blog = mongoose.model("Blog", blogSchema);
 
-const mongoUrl = "mongodb://localhost/bloglist";
+const mongoUrl = process.env.MONGODB_URI;
+
 mongoose.connect(mongoUrl);
 
 app.use(cors());
