@@ -1,4 +1,12 @@
-const express = require("express");
+const app = require("./app");
+const config = require("./utils/config");
+const logger = require("./utils/logger");
+
+app.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`);
+});
+
+/*const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -23,4 +31,4 @@ app.use(express.json());
 
 app.listen(config.PORT, () => {
   logger.info(`Server running on port ${config.PORT}`);
-});
+});*/
