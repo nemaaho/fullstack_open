@@ -2,10 +2,11 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
+const app = require("./app");
 const config = require("./utils/config");
 const logger = require("./utils/logger");
 
-const blogSchema = mongoose.Schema({
+const blogSchema = new mongoose.Schema({
   title: String,
   author: String,
   url: String,
@@ -13,10 +14,9 @@ const blogSchema = mongoose.Schema({
 });
 
 const Blog = mongoose.model("Blog", blogSchema);
+module.exports = Blog;
 
-const mongoUrl = process.env.MONGODB_URI;
-
-mongoose.connect(mongoUrl);
+mongoose.connect(config.MONGODB_URI);
 
 app.use(cors());
 app.use(express.json());
