@@ -1,7 +1,17 @@
-const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>  
-)
+const Blog = ({ blog, user, deleteBlog }) => {
+  const showDeleteButton = blog.user && blog.user.username === user.username
+
+  return (
+    <div>
+      <h3>
+        {blog.title} by {blog.author}
+      </h3>
+      <p>{blog.url}</p>
+      {showDeleteButton && (
+        <button onClick={() => deleteBlog(blog.id, blog.title)}>remove</button>
+      )}
+    </div>
+  )
+}
 
 export default Blog
