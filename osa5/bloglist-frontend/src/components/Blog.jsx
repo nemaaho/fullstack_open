@@ -1,5 +1,5 @@
 const Blog = ({ blog, user, deleteBlog }) => {
-  const showDeleteButton = blog.user && blog.user.username === user.username
+  const showDeleteButton = user.username && blog.user.username === user.username
 
   return (
     <div>
@@ -15,3 +15,5 @@ const Blog = ({ blog, user, deleteBlog }) => {
 }
 
 export default Blog
+
+

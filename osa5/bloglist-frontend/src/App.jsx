@@ -158,20 +158,22 @@ const App = () => {
       {!user && loginForm()}
       {user && (
         <div>
-          <p>{user.name} logged in</p>
-          <button onClick={handleLogout}>logout</button>
-          <Togglable buttonLabel="new blog" ref={blogFormRef}>
-            <BlogForm createBlog={addBlog} />
-          </Togglable>
+          <div>
+            <p>{user.name} logged in</p>
+            <button onClick={handleLogout}>logout</button>
+            <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+              <BlogForm createBlog={addBlog} />
+            </Togglable>
+          </div>
+
+          <h2>Blog list</h2>
+          <ul>
+            {blogs.map((blog, i) => (
+              <Blog key={i} blog={blog} user={user} deleteBlog={deleteBlog} toggleImportance={() => toggleImportanceOf(blog.id)} />
+            ))}
+          </ul>
         </div>
       )}
-
-      <h2>Blog list</h2>
-      <ul>
-        {blogs.map((blog, i) => (
-          <Blog key={i} blog={blog} user={user} deleteBlog={deleteBlog} toggleImportance={() => toggleImportanceOf(blog.id)} />
-        ))}
-      </ul>
     </div>
   )
 }
